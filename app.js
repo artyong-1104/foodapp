@@ -5,6 +5,8 @@ let searchQuery = '';
 let currentTheme = 'dark';
 let editingId = null;
 let currentDate = new Date();
+let selectedDate = null;
+let calendarViewDate = new Date();
 
 // ===== DOM Elements =====
 const todoForm = document.getElementById('todo-form');
@@ -20,6 +22,15 @@ const clearSearchBtn = document.getElementById('clear-search');
 const themeToggleBtn = document.getElementById('theme-toggle');
 const progressBar = document.getElementById('progress-bar');
 const progressPercentage = document.getElementById('progress-percentage');
+const calendarWidget = document.getElementById('calendar-widget');
+const calendarDropdown = document.getElementById('calendar-dropdown');
+const calendarDays = document.getElementById('calendar-days');
+const calendarTitle = document.getElementById('calendar-title');
+const prevMonthBtn = document.getElementById('prev-month');
+const nextMonthBtn = document.getElementById('next-month');
+const todayBtn = document.getElementById('today-btn');
+const clearDateBtn = document.getElementById('clear-date-btn');
+
 
 // ===== Initialize App =====
 function init() {
@@ -48,6 +59,20 @@ function attachEventListeners() {
     searchInput.addEventListener('input', handleSearch);
     clearSearchBtn.addEventListener('click', clearSearch);
     themeToggleBtn.addEventListener('click', toggleTheme);
+
+    // Calendar picker events
+    calendarWidget.addEventListener('click', toggleCalendarDropdown);
+    prevMonthBtn.addEventListener('click', () => changeMonth(-1));
+    nextMonthBtn.addEventListener('click', () => changeMonth(1));
+    todayBtn.addEventListener('click', selectToday);
+    clearDateBtn.addEventListener('click', clearSelectedDate);
+
+    // Close calendar when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!calendarWidget.contains(e.target) && !calendarDropdown.contains(e.target)) {
+            closeCalendarDropdown();
+        }
+    });
 }
 
 // ===== Add Todo =====
@@ -61,7 +86,8 @@ function handleAddTodo(e) {
         id: Date.now(),
         text: text,
         completed: false,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        date: selectedDate ? selectedDate.toISOString() : null
     };
 
     todos.unshift(todo);
@@ -204,6 +230,15 @@ function getFilteredTodos() {
         );
     }
 
+    // Apply date filter
+    if (selectedDate) {
+        const selectedDateStr = formatDateForComparison(selectedDate);
+        filtered = filtered.filter(t => {
+            if (!t.date) return false;
+            return formatDateForComparison(new Date(t.date)) === selectedDateStr;
+        });
+    }
+
     return filtered;
 }
 
@@ -342,6 +377,143 @@ function updateCalendar() {
     document.getElementById('calendar-number').textContent = dayOfMonth;
     document.getElementById('calendar-month').textContent = month;
     document.getElementById('calendar-year').textContent = year;
+}
+
+// ===== Calendar Picker =====
+function toggleCalendarDropdown() {
+    const isOpen = calendarDropdown.classList.contains('show');
+    if (isOpen) {
+        closeCalendarDropdown();
+    } else {
+        openCalendarDropdown();
+    }
+}
+
+function openCalendarDropdown() {
+    calendarDropdown.classList.add('show');
+    calendarWidget.classList.add('active');
+    calendarViewDate = selectedDate ? new Date(selectedDate) : new Date();
+    renderCalendarDays();
+}
+
+function closeCalendarDropdown() {
+    calendarDropdown.classList.remove('show');
+    calendarWidget.classList.remove('active');
+}
+
+function renderCalendarDays() {
+    const year = calendarViewDate.getFullYear();
+    const month = calendarViewDate.getMonth();
+
+    // Update title
+    const months = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+    calendarTitle.textContent = `${year}년 ${months[month]}`;
+
+    // Get first day of month and number of days
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+    calendarDays.innerHTML = '';
+
+    // Previous month days
+    for (let i = firstDay - 1; i >= 0; i--) {
+        const day = daysInPrevMonth - i;
+        const cell = createDayCell(day, true, year, month - 1);
+        calendarDays.appendChild(cell);
+    }
+
+    // Current month days
+    for (let day = 1; day <= daysInMonth; day++) {
+        const cell = createDayCell(day, false, year, month);
+        calendarDays.appendChild(cell);
+    }
+
+    // Next month days
+    const totalCells = calendarDays.children.length;
+    const remainingCells = 42 - totalCells; // 6 rows * 7 days
+    for (let day = 1; day <= remainingCells; day++) {
+        const cell = createDayCell(day, true, year, month + 1);
+        calendarDays.appendChild(cell);
+    }
+}
+
+function createDayCell(day, isOtherMonth, year, month) {
+    const cell = document.createElement('div');
+    cell.className = 'calendar-day-cell';
+    cell.textContent = day;
+
+    const cellDate = new Date(year, month, day);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    cellDate.setHours(0, 0, 0, 0);
+
+    if (isOtherMonth) {
+        cell.classList.add('other-month');
+    }
+
+    // Check if today
+    if (cellDate.getTime() === today.getTime()) {
+        cell.classList.add('today');
+    }
+
+    // Check if selected
+    if (selectedDate) {
+        const selected = new Date(selectedDate);
+        selected.setHours(0, 0, 0, 0);
+        if (cellDate.getTime() === selected.getTime()) {
+            cell.classList.add('selected');
+        }
+    }
+
+    // Check if has todos
+    const dateStr = formatDateForComparison(cellDate);
+    const todosOnDate = todos.filter(todo => {
+        if (!todo.date) return false;
+        return formatDateForComparison(new Date(todo.date)) === dateStr;
+    });
+
+    if (todosOnDate.length > 0) {
+        cell.classList.add('has-todos');
+    }
+
+    cell.addEventListener('click', () => selectDate(cellDate));
+
+    return cell;
+}
+
+function selectDate(date) {
+    selectedDate = new Date(date);
+    renderCalendarDays();
+    updateCalendar(); // Update header to show selected date
+    renderTodos();
+    closeCalendarDropdown();
+}
+
+function changeMonth(delta) {
+    calendarViewDate.setMonth(calendarViewDate.getMonth() + delta);
+    renderCalendarDays();
+}
+
+function selectToday() {
+    selectedDate = new Date();
+    calendarViewDate = new Date();
+    renderCalendarDays();
+    updateCalendar(); // Update header to show today
+    renderTodos();
+    closeCalendarDropdown();
+}
+
+function clearSelectedDate() {
+    selectedDate = null;
+    renderCalendarDays();
+    updateCalendar(); // Update header to show current date
+    renderTodos();
+    closeCalendarDropdown();
+}
+
+function formatDateForComparison(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 }
 
 // ===== Utility Functions =====
