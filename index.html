@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - 할 일 관리</title>
+    <meta name="description" content="모던하고 아름다운 할 일 관리 애플리케이션">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="todo-wrapper">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <div class="logo">
+                        <i class="fas fa-check-circle"></i>
+                        <h1>Todo App</h1>
+                    </div>
+                    <div class="calendar-widget">
+                        <div class="calendar-date">
+                            <div class="calendar-day" id="calendar-day">화</div>
+                            <div class="calendar-number" id="calendar-number">11</div>
+                        </div>
+                        <div class="calendar-info">
+                            <div class="calendar-month" id="calendar-month">2월</div>
+                            <div class="calendar-year" id="calendar-year">2026</div>
+                        </div>
+                    </div>
+                    <div class="header-right">
+                        <div class="stats">
+                            <span class="stat-item">
+                                <i class="fas fa-tasks"></i>
+                                <span id="total-tasks">0</span>
+                            </span>
+                            <span class="stat-item">
+                                <i class="fas fa-check"></i>
+                                <span id="completed-tasks">0</span>
+                            </span>
+                        </div>
+                        <button id="theme-toggle" class="theme-toggle" aria-label="테마 전환">
+                            <i class="fas fa-sun"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                    <span class="progress-percentage" id="progress-percentage">0%</span>
+                </div>
+            </header>
+
+            <!-- Input Section -->
+            <div class="input-section">
+                <form id="todo-form" class="todo-form">
+                    <div class="input-wrapper">
+                        <i class="fas fa-plus-circle input-icon"></i>
+                        <input type="text" id="todo-input" class="todo-input" placeholder="새로운 할 일을 입력하세요..."
+                            autocomplete="off" required>
+                        <button type="submit" class="add-btn">
+                            <span>추가</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="search-filter-section">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="search-input" class="search-input" placeholder="할 일 검색..."
+                        autocomplete="off">
+                    <button id="clear-search" class="clear-search-btn" aria-label="검색 초기화">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="filter-tabs">
+                    <button class="filter-btn active" data-filter="all">
+                        <i class="fas fa-list"></i>
+                        전체
+                    </button>
+                    <button class="filter-btn" data-filter="active">
+                        <i class="fas fa-circle"></i>
+                        진행중
+                    </button>
+                    <button class="filter-btn" data-filter="completed">
+                        <i class="fas fa-check-circle"></i>
+                        완료
+                    </button>
+                </div>
+            </div>
+
+            <!-- Todo List -->
+            <div class="todo-list-container">
+                <ul id="todo-list" class="todo-list">
+                    <!-- Todos will be dynamically added here -->
+                </ul>
+                <div id="empty-state" class="empty-state">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>할 일이 없습니다</p>
+                    <span>새로운 할 일을 추가해보세요!</span>
+                </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="footer-actions">
+                <button id="clear-completed" class="clear-btn">
+                    <i class="fas fa-trash-alt"></i>
+                    완료된 항목 삭제
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom JS -->
+    <script src="app.js"></script>
+</body>
+
+</html>

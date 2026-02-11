@@ -1,0 +1,723 @@
+/* ===== CSS Variables - Notebook/Planner Style ===== */
+:root {
+    /* Soft pastel colors from reference */
+    --sage-green: #c8d5b9;
+    --soft-mint: #d4e5d4;
+    --cream: #faf8f3;
+    --warm-white: #ffffff;
+    --light-gray: #f5f5f5;
+    --border-gray: #e0e0e0;
+    --text-dark: #4a4a4a;
+    --text-medium: #6b6b6b;
+    --text-light: #9b9b9b;
+
+    /* Accent colors for categories */
+    --pink-accent: #f4c2c2;
+    --blue-accent: #b8d4e8;
+    --green-accent: #c8d5b9;
+    --peach-accent: #f4d4c2;
+
+    /* Shadows */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 16px;
+
+    --transition: 0.3s ease;
+}
+
+/* Dark theme */
+[data-theme="dark"] {
+    --cream: #2a2a2a;
+    --warm-white: #3a3a3a;
+    --light-gray: #4a4a4a;
+    --border-gray: #555555;
+    --text-dark: #e0e0e0;
+    --text-medium: #c0c0c0;
+    --text-light: #a0a0a0;
+}
+
+/* ===== Reset ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--sage-green);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    transition: background 0.5s ease;
+}
+
+/* ===== Container ===== */
+.container {
+    width: 100%;
+    max-width: 800px;
+    position: relative;
+}
+
+.todo-wrapper {
+    background: var(--warm-white);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    position: relative;
+}
+
+/* Spiral binding effect on left */
+.todo-wrapper::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 20px,
+            var(--border-gray) 20px,
+            var(--border-gray) 25px,
+            transparent 25px,
+            transparent 45px);
+    border-right: 2px solid var(--border-gray);
+    z-index: 10;
+}
+
+/* Spiral holes */
+.todo-wrapper::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 30px;
+    width: 16px;
+    height: calc(100% - 60px);
+    background: repeating-linear-gradient(to bottom,
+            transparent 0px,
+            transparent 15px,
+            var(--sage-green) 15px,
+            var(--sage-green) 30px,
+            transparent 30px,
+            transparent 45px);
+    border-radius: 8px;
+    z-index: 11;
+}
+
+/* ===== Header ===== */
+.header {
+    background: var(--cream);
+    padding: 2rem 2rem 2rem 4.5rem;
+    border-bottom: 2px solid var(--border-gray);
+    position: relative;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.logo i {
+    font-size: 1.8rem;
+    color: var(--sage-green);
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    letter-spacing: -0.5px;
+}
+
+/* Calendar Widget */
+.calendar-widget {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: white;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid var(--border-gray);
+}
+
+.calendar-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 0.75rem;
+    border-right: 2px solid var(--border-gray);
+}
+
+.calendar-day {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--sage-green);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.calendar-number {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1;
+}
+
+.calendar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.calendar-month {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.calendar-year {
+    font-size: 0.75rem;
+    color: var(--text-medium);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-medium);
+    background: var(--light-gray);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-md);
+}
+
+.stat-item i {
+    color: var(--sage-green);
+}
+
+.theme-toggle {
+    background: var(--light-gray);
+    border: none;
+    color: var(--text-medium);
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--transition);
+}
+
+.theme-toggle:hover {
+    background: var(--sage-green);
+    color: white;
+}
+
+/* Progress bar */
+.progress-container {
+    margin-top: 1.5rem;
+    height: 8px;
+    background: var(--light-gray);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sage-green), var(--soft-mint));
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.progress-percentage {
+    position: absolute;
+    top: -1.5rem;
+    right: 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-medium);
+}
+
+/* ===== Input Section ===== */
+.input-section {
+    padding: 1.5rem 2rem 1.5rem 4.5rem;
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--light-gray);
+    border: 2px solid var(--border-gray);
+    border-radius: var(--radius-md);
+    padding: 0.5rem 1rem;
+    transition: var(--transition);
+}
+
+.input-wrapper:focus-within {
+    border-color: var(--sage-green);
+    background: white;
+}
+
+.input-icon {
+    color: var(--text-light);
+    font-size: 1.2rem;
+}
+
+.todo-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-dark);
+    font-size: 1rem;
+    padding: 0.5rem 0;
+}
+
+.todo-input::placeholder {
+    color: var(--text-light);
+}
+
+.add-btn {
+    background: var(--sage-green);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.add-btn:hover {
+    background: #b5c4a8;
+    transform: translateY(-1px);
+}
+
+/* ===== Search and Filter ===== */
+.search-filter-section {
+    background: var(--warm-white);
+    border-bottom: 1px solid var(--border-gray);
+}
+
+.search-wrapper {
+    padding: 1rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--light-gray);
+    margin: 0 2rem 0 4.5rem;
+    margin-top: 1.5rem;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--border-gray);
+    transition: var(--transition);
+}
+
+.search-wrapper:focus-within {
+    border-color: var(--sage-green);
+    background: white;
+}
+
+.search-icon {
+    color: var(--text-light);
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+.search-input::placeholder {
+    color: var(--text-light);
+}
+
+.clear-search-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 50%;
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.search-wrapper:focus-within .clear-search-btn,
+.search-wrapper.has-text .clear-search-btn {
+    opacity: 1;
+}
+
+.clear-search-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+/* Filter tabs */
+.filter-tabs {
+    display: flex;
+    gap: 0.75rem;
+    padding: 1.5rem 2rem 1.5rem 4.5rem;
+}
+
+.filter-btn {
+    flex: 1;
+    background: var(--light-gray);
+    border: 2px solid var(--border-gray);
+    color: var(--text-medium);
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.filter-btn:hover {
+    background: var(--cream);
+    border-color: var(--sage-green);
+}
+
+.filter-btn.active {
+    background: var(--sage-green);
+    border-color: var(--sage-green);
+    color: white;
+}
+
+/* ===== Todo List ===== */
+.todo-list-container {
+    min-height: 300px;
+    max-height: 500px;
+    overflow-y: auto;
+    background: var(--warm-white);
+    padding: 1.5rem 2rem 2rem 4.5rem;
+}
+
+.todo-list-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.todo-list-container::-webkit-scrollbar-track {
+    background: var(--light-gray);
+}
+
+.todo-list-container::-webkit-scrollbar-thumb {
+    background: var(--sage-green);
+    border-radius: 4px;
+}
+
+.todo-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.todo-item {
+    background: var(--cream);
+    border: 1px solid var(--border-gray);
+    border-left: 4px solid var(--sage-green);
+    border-radius: var(--radius-sm);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: var(--transition);
+}
+
+.todo-item:hover {
+    box-shadow: var(--shadow-sm);
+    transform: translateX(2px);
+}
+
+.todo-item.completed {
+    opacity: 0.6;
+    border-left-color: var(--text-light);
+}
+
+.todo-item.completed .todo-text {
+    text-decoration: line-through;
+    color: var(--text-light);
+}
+
+/* Checkbox */
+.todo-checkbox {
+    width: 22px;
+    height: 22px;
+    border: 2px solid var(--border-gray);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: white;
+    transition: var(--transition);
+}
+
+.todo-checkbox:hover {
+    border-color: var(--sage-green);
+}
+
+.todo-checkbox i {
+    font-size: 0.75rem;
+    color: white;
+    opacity: 0;
+}
+
+.todo-item.completed .todo-checkbox {
+    background: var(--sage-green);
+    border-color: var(--sage-green);
+}
+
+.todo-item.completed .todo-checkbox i {
+    opacity: 1;
+}
+
+.todo-text {
+    flex: 1;
+    color: var(--text-dark);
+    font-size: 0.95rem;
+}
+
+/* Edit and delete buttons */
+.edit-btn,
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: var(--transition);
+}
+
+.todo-item:hover .edit-btn,
+.todo-item:hover .delete-btn {
+    opacity: 1;
+}
+
+.edit-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: var(--sage-green);
+}
+
+.delete-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #e57373;
+}
+
+/* Edit mode */
+.todo-item.editing {
+    border-color: var(--sage-green);
+}
+
+.todo-item.editing .todo-text {
+    display: none;
+}
+
+.todo-item.editing .edit-btn,
+.todo-item.editing .delete-btn {
+    display: none;
+}
+
+.edit-input {
+    flex: 1;
+    background: white;
+    border: 2px solid var(--sage-green);
+    border-radius: var(--radius-sm);
+    color: var(--text-dark);
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    outline: none;
+}
+
+.edit-actions {
+    display: none;
+    gap: 0.5rem;
+}
+
+.todo-item.editing .edit-actions {
+    display: flex;
+}
+
+.save-edit-btn,
+.cancel-edit-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: var(--radius-sm);
+    transition: var(--transition);
+}
+
+.save-edit-btn {
+    color: var(--sage-green);
+}
+
+.save-edit-btn:hover {
+    background: rgba(200, 213, 185, 0.2);
+}
+
+.cancel-edit-btn {
+    color: #e57373;
+}
+
+.cancel-edit-btn:hover {
+    background: rgba(229, 115, 115, 0.2);
+}
+
+/* ===== Empty State ===== */
+.empty-state {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state.show {
+    display: flex;
+}
+
+.empty-state i {
+    font-size: 4rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-medium);
+    margin-bottom: 0.5rem;
+}
+
+.empty-state span {
+    font-size: 0.95rem;
+    color: var(--text-light);
+}
+
+/* ===== Footer ===== */
+.footer-actions {
+    padding: 1.5rem 2rem 1.5rem 4.5rem;
+    background: var(--warm-white);
+    border-top: 1px solid var(--border-gray);
+    display: flex;
+    justify-content: center;
+}
+
+.clear-btn {
+    background: transparent;
+    border: 2px solid var(--border-gray);
+    color: var(--text-medium);
+    padding: 0.75rem 1.5rem;
+    border-radius: var(--radius-md);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: var(--transition);
+}
+
+.clear-btn:hover {
+    background: rgba(229, 115, 115, 0.1);
+    border-color: #e57373;
+    color: #e57373;
+}
+
+.clear-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+    body {
+        padding: 1rem 0.5rem;
+    }
+
+    .todo-wrapper::before,
+    .todo-wrapper::after {
+        display: none;
+    }
+
+    .header,
+    .input-section,
+    .search-wrapper,
+    .filter-tabs,
+    .todo-list-container,
+    .footer-actions {
+        padding-left: 1.5rem;
+    }
+
+    .search-wrapper {
+        margin-left: 1.5rem;
+    }
+
+    .logo h1 {
+        font-size: 1.3rem;
+    }
+
+    .stats {
+        gap: 0.5rem;
+    }
+
+    .stat-item {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.85rem;
+    }
+
+    .filter-btn span {
+        display: none;
+    }
+}
