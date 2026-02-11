@@ -157,6 +157,28 @@ body {
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-sm);
     border: 2px solid var(--border-gray);
+    cursor: pointer;
+    transition: all var(--transition);
+    position: relative;
+    animation: gentleFloat 3s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-2px);
+    }
+}
+
+.calendar-widget:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    animation: none;
 }
 
 .calendar-date {
@@ -199,21 +221,11 @@ body {
     color: var(--text-medium);
 }
 
-.calendar-widget {
-    cursor: pointer;
-    transition: var(--transition);
-    position: relative;
-}
-
-.calendar-widget:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
-}
-
 .calendar-arrow {
     color: var(--text-light);
     font-size: 0.75rem;
     transition: transform var(--transition);
+    margin-left: auto;
 }
 
 .calendar-widget.active .calendar-arrow {
@@ -225,7 +237,7 @@ body {
     position: absolute;
     top: calc(100% + 0.5rem);
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-10px);
     background: white;
     border: 2px solid var(--border-gray);
     border-radius: var(--radius-md);
@@ -235,14 +247,26 @@ body {
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
-    transform: translateX(-50%) translateY(-10px);
-    transition: all var(--transition);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .calendar-dropdown.show {
     opacity: 1;
     visibility: visible;
     transform: translateX(-50%) translateY(0);
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px) scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
 }
 
 .calendar-header {
@@ -309,13 +333,16 @@ body {
     color: var(--text-dark);
     border-radius: var(--radius-sm);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all 0.2s ease;
     background: transparent;
     border: 1px solid transparent;
+    position: relative;
 }
 
 .calendar-day-cell:hover {
     background: var(--light-gray);
+    transform: scale(1.1);
+    box-shadow: var(--shadow-sm);
 }
 
 .calendar-day-cell.other-month {
@@ -325,12 +352,31 @@ body {
 .calendar-day-cell.today {
     border-color: var(--sage-green);
     font-weight: 600;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 rgba(200, 213, 185, 0.4);
+    }
+
+    50% {
+        box-shadow: 0 0 0 4px rgba(200, 213, 185, 0);
+    }
 }
 
 .calendar-day-cell.selected {
     background: var(--sage-green);
     color: white;
     font-weight: 600;
+    transform: scale(1.05);
+}
+
+.calendar-day-cell.selected:hover {
+    background: #b5c4a8;
+    transform: scale(1.1);
 }
 
 .calendar-day-cell.has-todos {
@@ -518,6 +564,119 @@ body {
 .add-btn:hover {
     background: #b5c4a8;
     transform: translateY(-1px);
+}
+
+/* Selector Row */
+.selector-row {
+    display: flex;
+    gap: 1rem;
+}
+
+/* Category Selector */
+.category-selector-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: var(--light-gray);
+    border-radius: var(--radius-md);
+}
+
+.selector-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-medium);
+    white-space: nowrap;
+}
+
+.category-options {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.category-option {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 0.75rem;
+    background: white;
+    border: 2px solid var(--border-gray);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all var(--transition);
+    font-size: 0.85rem;
+    color: var(--text-medium);
+}
+
+.category-option i {
+    font-size: 0.9rem;
+}
+
+.category-option:hover {
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--sage-green);
+}
+
+.category-option.active {
+    border-color: var(--sage-green);
+    background: rgba(200, 213, 185, 0.1);
+    color: var(--sage-green);
+    font-weight: 600;
+}
+
+.category-option[data-category="work"].active {
+    border-color: #6b7280;
+    background: rgba(107, 114, 128, 0.1);
+    color: #6b7280;
+}
+
+.category-option[data-category="study"].active {
+    border-color: #3b82f6;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+}
+
+.category-option[data-category="hobby"].active {
+    border-color: #ec4899;
+    background: rgba(236, 72, 153, 0.1);
+    color: #ec4899;
+}
+
+.category-option[data-category="exercise"].active {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+}
+
+.category-option[data-category="shopping"].active {
+    border-color: #f59e0b;
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+}
+
+.category-option[data-category="other"].active {
+    border-color: #8b5cf6;
+    background: rgba(139, 92, 246, 0.1);
+    color: #8b5cf6;
+}
+
+/* Todo Item Category Badge */
+.todo-category {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.todo-category i {
+    font-size: 0.7rem;
 }
 
 /* ===== Search and Filter ===== */

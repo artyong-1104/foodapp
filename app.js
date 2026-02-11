@@ -8,6 +8,7 @@ let currentDate = new Date();
 let selectedDate = null;
 let calendarViewDate = new Date();
 let selectedTag = 'none';
+let selectedCategory = 'none';
 
 // Tag colors
 const TAG_COLORS = {
@@ -16,6 +17,16 @@ const TAG_COLORS = {
     green: '#c8d5b9',
     peach: '#f4d4c2',
     purple: '#d4c2f4'
+};
+
+// Categories with icons
+const CATEGORIES = {
+    work: { icon: 'fa-briefcase', label: '업무', color: '#6b7280' },
+    study: { icon: 'fa-book', label: '공부', color: '#3b82f6' },
+    hobby: { icon: 'fa-palette', label: '취미', color: '#ec4899' },
+    exercise: { icon: 'fa-dumbbell', label: '운동', color: '#10b981' },
+    shopping: { icon: 'fa-shopping-cart', label: '쇼핑', color: '#f59e0b' },
+    other: { icon: 'fa-circle', label: '기타', color: '#8b5cf6' }
 };
 
 // ===== DOM Elements =====
@@ -41,6 +52,8 @@ const nextMonthBtn = document.getElementById('next-month');
 const todayBtn = document.getElementById('today-btn');
 const clearDateBtn = document.getElementById('clear-date-btn');
 const tagOptions = document.querySelectorAll('.tag-option');
+const categoryOptions = document.querySelectorAll('.category-option');
+
 
 
 // ===== Initialize App =====
@@ -89,6 +102,11 @@ function attachEventListeners() {
     tagOptions.forEach(option => {
         option.addEventListener('click', handleTagSelection);
     });
+
+    // Category selection events
+    categoryOptions.forEach(option => {
+        option.addEventListener('click', handleCategorySelection);
+    });
 }
 
 // ===== Add Todo =====
@@ -103,7 +121,9 @@ function handleAddTodo(e) {
         text: text,
         completed: false,
         createdAt: new Date().toISOString(),
-        date: selectedDate ? selectedDate.toISOString() : null
+        date: selectedDate ? selectedDate.toISOString() : null,
+        tag: selectedTag !== 'none' ? selectedTag : null,
+        category: selectedCategory !== 'none' ? selectedCategory : null
     };
 
     todos.unshift(todo);
@@ -115,13 +135,19 @@ function handleAddTodo(e) {
     todoInput.value = '';
     todoInput.focus();
 
+    // Reset tag and category selection to none
+    selectedTag = 'none';
+    selectedCategory = 'none';
+    updateTagSelection();
+    updateCategorySelection();
+
     // Add animation feedback
     const firstItem = todoList.querySelector('.todo-item');
     if (firstItem) {
-        firstItem.style.animation = 'none';
+        firstItem.style.animation = 'paperSlide 0.3s ease-out';
         setTimeout(() => {
             firstItem.style.animation = '';
-        }, 10);
+        }, 300); // Reset animation after it finishes
     }
 }
 
@@ -196,11 +222,19 @@ function renderTodos() {
             ? `<span class="todo-tag" style="background: ${TAG_COLORS[todo.tag]};" title="${todo.tag}"></span>`
             : '';
 
+        const categoryHtml = todo.category && CATEGORIES[todo.category]
+            ? `<span class="todo-category" style="color: ${CATEGORIES[todo.category].color}; border: 1px solid ${CATEGORIES[todo.category].color};">
+                <i class="fas ${CATEGORIES[todo.category].icon}"></i>
+                <span>${CATEGORIES[todo.category].label}</span>
+               </span>`
+            : '';
+
         return `
         <li class="todo-item ${todo.completed ? 'completed' : ''} ${editingId === todo.id ? 'editing' : ''}" data-id="${todo.id}">
             <div class="todo-checkbox" onclick="toggleTodo(${todo.id})">
                 <i class="fas fa-check"></i>
             </div>
+            ${categoryHtml}
             ${tagHtml}
             <span class="todo-text" ondblclick="editTodo(${todo.id})">${escapeHtml(todo.text)}</span>
             <input type="text" class="edit-input" id="edit-input-${todo.id}" value="${escapeHtml(todo.text)}">
@@ -322,6 +356,33 @@ function saveEdit(id) {
 function cancelEdit() {
     editingId = null;
     renderTodos();
+}
+
+function updateTagSelection() {
+    tagOptions.forEach(option => {
+        if (option.dataset.tag === selectedTag) {
+            option.classList.add('active');
+        } else {
+            option.classList.remove('active');
+        }
+    });
+}
+
+// ===== Category Selection =====
+function handleCategorySelection(e) {
+    const button = e.currentTarget;
+    selectedCategory = button.dataset.category;
+    updateCategorySelection();
+}
+
+function updateCategorySelection() {
+    categoryOptions.forEach(option => {
+        if (option.dataset.category === selectedCategory) {
+            option.classList.add('active');
+        } else {
+            option.classList.remove('active');
+        }
+    });
 }
 
 // ===== Search Functionality =====

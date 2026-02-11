@@ -93,19 +93,90 @@
             </header>
 
             <!-- Input Section -->
-            <div class="input-section">
+            <section class="input-section">
                 <form id="todo-form" class="todo-form">
                     <div class="input-wrapper">
-                        <i class="fas fa-plus-circle input-icon"></i>
+                        <i class="fas fa-plus input-icon"></i>
                         <input type="text" id="todo-input" class="todo-input" placeholder="새로운 할 일을 입력하세요..."
-                            autocomplete="off" required>
-                        <button type="submit" class="add-btn">
-                            <span>추가</span>
-                            <i class="fas fa-arrow-right"></i>
-                        </button>
+                            autocomplete="off">
                     </div>
+
+                    <!-- Category Selector -->
+                    <div class="selector-row">
+                        <div class="category-selector-wrapper">
+                            <label class="selector-label">카테고리:</label>
+                            <div class="category-options">
+                                <button type="button" class="category-option active" data-category="none"
+                                    aria-label="카테고리 없음">
+                                    <i class="fas fa-ban"></i>
+                                    <span>없음</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="work" aria-label="업무">
+                                    <i class="fas fa-briefcase"></i>
+                                    <span>업무</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="study" aria-label="공부">
+                                    <i class="fas fa-book"></i>
+                                    <span>공부</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="hobby" aria-label="취미">
+                                    <i class="fas fa-palette"></i>
+                                    <span>취미</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="exercise" aria-label="운동">
+                                    <i class="fas fa-dumbbell"></i>
+                                    <span>운동</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="shopping" aria-label="쇼핑">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span>쇼핑</span>
+                                </button>
+                                <button type="button" class="category-option" data-category="other" aria-label="기타">
+                                    <i class="fas fa-circle"></i>
+                                    <span>기타</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tag Selector -->
+                    <div class="selector-row">
+                        <div class="tag-selector-wrapper">
+                            <label class="selector-label">태그:</label>
+                            <div class="tag-options">
+                                <button type="button" class="tag-option active" data-tag="none" aria-label="태그 없음">
+                                    <i class="fas fa-ban"></i>
+                                </button>
+                                <button type="button" class="tag-option" data-tag="pink" data-color="#f4c2c2"
+                                    aria-label="핑크">
+                                    <span class="tag-color" style="background: #f4c2c2;"></span>
+                                </button>
+                                <button type="button" class="tag-option" data-tag="blue" data-color="#b8d4e8"
+                                    aria-label="블루">
+                                    <span class="tag-color" style="background: #b8d4e8;"></span>
+                                </button>
+                                <button type="button" class="tag-option" data-tag="green" data-color="#c8d5b9"
+                                    aria-label="그린">
+                                    <span class="tag-color" style="background: #c8d5b9;"></span>
+                                </button>
+                                <button type="button" class="tag-option" data-tag="peach" data-color="#f4d4c2"
+                                    aria-label="피치">
+                                    <span class="tag-color" style="background: #f4d4c2;"></span>
+                                </button>
+                                <button type="button" class="tag-option" data-tag="purple" data-color="#d4c2f4"
+                                    aria-label="퍼플">
+                                    <span class="tag-color" style="background: #d4c2f4;"></span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="add-btn">
+                        <span>추가</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
                 </form>
-            </div>
+            </section>
 
             <!-- Search and Filter Section -->
             <div class="search-filter-section">
