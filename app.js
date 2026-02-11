@@ -7,6 +7,16 @@ let editingId = null;
 let currentDate = new Date();
 let selectedDate = null;
 let calendarViewDate = new Date();
+let selectedTag = 'none';
+
+// Tag colors
+const TAG_COLORS = {
+    pink: '#f4c2c2',
+    blue: '#b8d4e8',
+    green: '#c8d5b9',
+    peach: '#f4d4c2',
+    purple: '#d4c2f4'
+};
 
 // ===== DOM Elements =====
 const todoForm = document.getElementById('todo-form');
@@ -30,6 +40,7 @@ const prevMonthBtn = document.getElementById('prev-month');
 const nextMonthBtn = document.getElementById('next-month');
 const todayBtn = document.getElementById('today-btn');
 const clearDateBtn = document.getElementById('clear-date-btn');
+const tagOptions = document.querySelectorAll('.tag-option');
 
 
 // ===== Initialize App =====
@@ -72,6 +83,11 @@ function attachEventListeners() {
         if (!calendarWidget.contains(e.target) && !calendarDropdown.contains(e.target)) {
             closeCalendarDropdown();
         }
+    });
+
+    // Tag selection events
+    tagOptions.forEach(option => {
+        option.addEventListener('click', handleTagSelection);
     });
 }
 
@@ -175,11 +191,17 @@ function renderTodos() {
 
     emptyState.classList.remove('show');
 
-    todoList.innerHTML = filteredTodos.map(todo => `
+    todoList.innerHTML = filteredTodos.map(todo => {
+        const tagHtml = todo.tag && TAG_COLORS[todo.tag]
+            ? `<span class="todo-tag" style="background: ${TAG_COLORS[todo.tag]};" title="${todo.tag}"></span>`
+            : '';
+
+        return `
         <li class="todo-item ${todo.completed ? 'completed' : ''} ${editingId === todo.id ? 'editing' : ''}" data-id="${todo.id}">
             <div class="todo-checkbox" onclick="toggleTodo(${todo.id})">
                 <i class="fas fa-check"></i>
             </div>
+            ${tagHtml}
             <span class="todo-text" ondblclick="editTodo(${todo.id})">${escapeHtml(todo.text)}</span>
             <input type="text" class="edit-input" id="edit-input-${todo.id}" value="${escapeHtml(todo.text)}">
             <div class="edit-actions">
@@ -197,7 +219,8 @@ function renderTodos() {
                 <i class="fas fa-trash"></i>
             </button>
         </li>
-    `).join('');
+    `;
+    }).join('');
 
     // Focus edit input if in edit mode
     if (editingId !== null) {
